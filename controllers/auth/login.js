@@ -64,46 +64,20 @@ const login = async (req, res) => {
   }
 };
 
-const logout = async (req, res) => {
-  const token = req?.user?.token;
-  try {
-    const tokenBlacklist = new BlacklistModel({
-      token: token,
-    });
-    await tokenBlacklist.save();
-    return res
-      .status(200)
-      .json({ status: true, message: "Logged out successfully" });
-  } catch (error) {
-    return res.status(500).json({ status: false, message: "Internal Error!" });
-  }
-};
-
 const checkTocken = (req, res) => {
   return res
     .status(200)
     .json({ status: true, message: "valid token", desc: "" });
 };
 
-const logoutFn = async (req, res) => {
+const logout = async (req, res) => {
   const token = req?.token;
-  try {
-    await BlacklistModel.create({
-      token: token,
-    });
-    return res.status(200).json({
-      status: true,
-      message: "Logout Successfull",
-      desc: " You have been logged out",
-    });
-  } catch (error) {
-    console.log(error);
-    return res.status(500).json({
-      status: false,
-      message: "Internal Error!",
-      desc: "Please try again later",
-    });
-  }
+  await BlacklistModel.create({ token });
+  return res.status(200).json({
+    status: true,
+    message: "Logout Successful",
+    desc: "You have been logged out",
+  });
 };
 
-module.exports = { login, logout, checkTocken, logoutFn };
+module.exports = { login, checkTocken, logout };
