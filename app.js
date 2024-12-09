@@ -7,6 +7,7 @@ const { connectDB } = require("./config/conn");
 const port = process.env.PORT || 3000;
 const loginRoute = require("./routes/login");
 const { departmentRoute } = require("./routes/admin/department");
+const { doctorRouter } = require("./routes/admin/doctor");
 
 connectDB();
 app.use(express.json());
@@ -18,7 +19,7 @@ app.get("/", (req, res) => {
 app.use(cors());
 app.use("/", loginRoute);
 app.use("/department", departmentRoute);
-
+app.use("/doctor", doctorRouter);
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
