@@ -10,6 +10,14 @@ const addDepartment = async (req, res) => {
     });
   }
   try {
+    const check = await DepartmentModel.findOne({ department: name });
+    if (check) {
+      return res.status(400).json({
+        status: false,
+        message: "Department Already exist!",
+        desc: "Plese add unique department..",
+      });
+    }
     const department = new DepartmentModel({
       department: name,
       desc: desc,
@@ -29,4 +37,20 @@ const addDepartment = async (req, res) => {
   }
 };
 
-module.exports = { addDepartment };
+const allDepartments = async (req, res) => {
+  try {
+    const data = await DepartmentModel.find({}).sort("department");
+    return res.status(200).send(data);
+  } catch (error) {
+    return res.status(500).json({
+      status: false,
+      title: "Technical Issue!",
+      desc: "Sorry, Please check your internal system",
+    });
+  }
+};
+const deleteDepartment = (req, res) => {
+  console.log(req.body.id);
+  console.log(req.body);
+};
+module.exports = { addDepartment, allDepartments, deleteDepartment };
