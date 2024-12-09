@@ -8,6 +8,6 @@ const departmentRoute = Router();
 
 departmentRoute.post("/add", addDepartment);
 departmentRoute.get("/all-department", allDepartments);
-departmentRoute.delete("/delete-department", deleteDepartment);
+departmentRoute.delete("/delete-department/:departmentId", deleteDepartment);
 
 module.exports = { departmentRoute };

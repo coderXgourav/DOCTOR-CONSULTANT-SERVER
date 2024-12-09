@@ -44,13 +44,26 @@ const allDepartments = async (req, res) => {
   } catch (error) {
     return res.status(500).json({
       status: false,
-      title: "Technical Issue!",
+      message: "Technical Issue!",
       desc: "Sorry, Please check your internal system",
     });
   }
 };
-const deleteDepartment = (req, res) => {
-  console.log(req.body.id);
-  console.log(req.body);
+const deleteDepartment = async (req, res) => {
+  const { departmentId } = req.params;
+  try {
+    await DepartmentModel.findByIdAndDelete(departmentId);
+    return res.status(200).json({
+      status: true,
+      message: "Deleted Department",
+      desc: "Department deleted successfully..",
+    });
+  } catch (error) {
+    return res.status(500).json({
+      status: false,
+      message: "Technical Issue!",
+      desc: "please try again later !",
+    });
+  }
 };
 module.exports = { addDepartment, allDepartments, deleteDepartment };
