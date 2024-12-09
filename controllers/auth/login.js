@@ -1,7 +1,7 @@
-const UserModel = require("../../models/users");
 const BlacklistModel = require("../../models/blacklistToken");
 const bcrypt = require("bcrypt");
 var jwt = require("jsonwebtoken");
+const { UserModel } = require("../../models/users");
 
 const login = async (req, res) => {
   const { email_username, password } = req.body;
