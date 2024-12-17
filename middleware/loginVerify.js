@@ -44,7 +44,7 @@ const loginVerify = async (req, res, next) => {
       }
 
       // Log the decoded user information
-      console.log("Decoded token information:", userDecode);
+      // console.log("Decoded token information:", userDecode);
 
       // Attach user data and token to the request object
       req.user = userDecode;

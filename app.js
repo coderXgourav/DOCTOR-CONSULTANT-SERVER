@@ -5,10 +5,11 @@ const cors = require("cors");
 dotenv.config();
 const { connectDB } = require("./config/conn");
 const port = process.env.PORT || 3000;
-const loginRoute = require("./routes/login");
+const loginRoute = require("./routes/admin/login");
 const { departmentRoute } = require("./routes/admin/department");
 const { patientRoute } = require("./routes/admin/patient");
 const { doctorRouter } = require("./routes/admin/doctor");
+const { router } = require("./routes/admin/admin");
 
 app.use(cors());
 connectDB();
@@ -23,6 +24,7 @@ app.use("/", loginRoute);
 app.use("/department", departmentRoute);
 app.use("/patient", patientRoute);
 app.use("/doctor", doctorRouter);
+app.use("/admin", router);
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });

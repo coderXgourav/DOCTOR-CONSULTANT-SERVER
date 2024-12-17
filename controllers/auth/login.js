@@ -1,7 +1,7 @@
 const BlacklistModel = require("../../models/blacklistToken");
 const bcrypt = require("bcrypt");
 var jwt = require("jsonwebtoken");
-const { UserModel } = require("../../models/users");
+const { adminModel } = require("../../models/admin");
 
 const login = async (req, res) => {
   const { email_username, password } = req.body;
@@ -14,8 +14,8 @@ const login = async (req, res) => {
   }
 
   try {
-    const user = await UserModel.findOne({
-      $or: [{ email_address: email_username }, { username: email_username }],
+    const user = await adminModel.findOne({
+      $or: [{ email: email_username }, { username: email_username }],
     });
 
     if (user != null) {
