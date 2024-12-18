@@ -26,4 +26,4 @@ const DoctorSchema = new Schema({
 
 const doctorModel = model("doctor", DoctorSchema);
 
-module.exports = doctorModel;
+module.exports = {doctorModel};

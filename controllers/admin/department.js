@@ -49,6 +49,8 @@ const allDepartments = async (req, res) => {
     });
   }
 };
+
+
 const deleteDepartment = async (req, res) => {
   const { departmentId } = req.params;
   try {
