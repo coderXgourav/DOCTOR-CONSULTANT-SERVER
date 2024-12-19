@@ -3,7 +3,6 @@ const bcrypt = require("bcrypt");
 const { adminModel } = require("../../models/admin");
 const { doctorModel } = require("../../models/doctor");
 
-
 // const addDoctor = async (req, res) => {
 //   try {
 //     // Destructure data from request body
@@ -97,8 +96,6 @@ const { doctorModel } = require("../../models/doctor");
 //   }
 // };
 
-
-
 const addDoctor = async (req, res) => {
   try {
     const {
@@ -118,24 +115,24 @@ const addDoctor = async (req, res) => {
       about,
     } = req.body;
 
-    console.log("Request body:", req.body);
-
     if (
       !firstName ||
       !lastName ||
-      // !age ||
-      // !gender ||
-      // !email ||
-      // !mobile ||
-      // !specialization ||
-      // !experience ||
-      // !qualifications ||
-      // !license ||
+      !age ||
+      !gender ||
+      !email ||
+      !mobile ||
+      !specialization ||
+      !experience ||
+      !qualifications ||
+      !license ||
+      !schedule ||
       !username ||
-      !password
-      // !about
+      !password ||
+      !about
     ) {
       return res.status(400).json({
+        status: false,
         message: "All fields are required",
         desc: "Please fill the all required fields",
       });
@@ -148,7 +145,9 @@ const addDoctor = async (req, res) => {
 
     if (existingUser) {
       return res.status(400).json({
+        status: false,
         message: "Email or username already exists.",
+        desc: " Please use a different email or username.",
       });
     }
 
@@ -156,7 +155,8 @@ const addDoctor = async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     // Parse schedule if it's sent as a string
-    const parsedSchedule = typeof schedule === "string" ? JSON.parse(schedule) : schedule;
+    const parsedSchedule =
+      typeof schedule === "string" ? JSON.parse(schedule) : schedule;
 
     // Create the doctor
     const user = new doctorModel({
@@ -179,24 +179,22 @@ const addDoctor = async (req, res) => {
     await user.save();
 
     return res.status(201).json({
+      status: true,
       message: "Doctor created successfully",
       doctorId: user._id,
-      status: true,  // Make sure this is true for success
+      status: true, // Make sure this is true for success
       desc: "Doctor profile has been created successfully.",
     });
   } catch (error) {
-    console.error("Error creating doctor:", error.message);
     return res.status(500).json({
+      status: false,
       message: "Failed to create doctor",
       error: error.message,
       status: false,
-    
       desc: "Oops! Something went wrong. Please try again later.",
     });
   }
 };
-
-
 
 const addAdmin = async (req, res) => {
   const { firstname, lastname, email, username, password } = req.body;
@@ -238,7 +236,8 @@ const getAllDoctors = async (req, res) => {
 
     // Calculate the skip and limit for pagination
     const skip = (page - 1) * limit;
-    const doctors = await doctorModel.find()
+    const doctors = await doctorModel
+      .find()
       .skip(skip)
       .limit(parseInt(limit))
       .exec();
@@ -286,7 +285,6 @@ const deleteDoctor = async (req, res) => {
     console.error(error);
     res.status(500).json({ message: "Error deleting doctor" });
   }
-}
-
+};
 
 module.exports = { addDoctor, addAdmin, getAllDoctors, deleteDoctor };
