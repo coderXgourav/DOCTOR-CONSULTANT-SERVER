@@ -64,7 +64,7 @@ const addPatient = async (req, res) => {
     });
   }
 };
-
+// echo
 const deletePatient = async (req, res) => {
   try {
     const { id } = req.params;
