@@ -22,7 +22,6 @@ const loginVerify = async (req, res, next) => {
       });
     }
 
-    // Check if the token is blacklisted
     const checkBlackListToken = await BlacklistModel.findOne({ token });
     if (checkBlackListToken) {
       return res.status(400).json({
@@ -33,25 +32,18 @@ const loginVerify = async (req, res, next) => {
     }
 
     // Verify the token
-    jwt.verify(token, process.env.SECRET_KEY, (error, userDecode) => {
-      if (error) {
-        console.error("JWT verification failed:", error.message);
-        return res.status(401).json({
-          status: false,
-          message: "Invalid or expired token.",
-          desc: "Please login again.",
-        });
-      }
-
-      // Log the decoded user information
-      // console.log("Decoded token information:", userDecode);
-
-      // Attach user data and token to the request object
-      req.user = userDecode;
+    const decoded = await jwt.verify(token, process.env.SECRET_KEY);
+    if (!decoded) {
+      return res.status(401).json({
+        status: false,
+        message: "Invalid or expired token.",
+        desc: "Please login again.",
+      });
+    } else {
+      req.user = decoded;
       req.token = token;
-
       next();
-    });
+    }
   } catch (error) {
     console.error("Error during token verification:", error.message);
     return res.status(500).json({
