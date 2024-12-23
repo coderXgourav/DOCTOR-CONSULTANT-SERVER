@@ -118,18 +118,19 @@ const addDoctor = async (req, res) => {
     if (
       !firstName ||
       !lastName ||
-      !age ||
+      // !age ||
       !gender ||
       !email ||
       !mobile ||
-      !specialization ||
-      !experience ||
-      !qualifications ||
-      !license ||
-      !schedule ||
-      !username ||
-      !password ||
-      !about
+      !username
+
+      // !specialization ||
+      // !experience ||
+      // !qualifications ||
+      // !license ||
+      // !schedule ||
+      // !password ||
+      // !about
     ) {
       return res.status(400).json({
         status: false,
