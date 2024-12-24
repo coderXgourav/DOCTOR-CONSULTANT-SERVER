@@ -6,6 +6,8 @@ const DoctorSchema = new Schema({
   age: { type: Number },
   gender: { type: String, enum: ["Male", "Female", "Other"] },
   email: { type: String },
+  username: { type: String, unique: true },
+  password: { type: String },
   mobile: { type: String },
   profilePhoto: { type: String }, // URL or file path for the profile photo
   specialization: { type: String },
@@ -21,9 +23,15 @@ const DoctorSchema = new Schema({
     fri: { start: { type: String }, end: { type: String } },
     sat: { start: { type: String }, end: { type: String } },
   },
-  about: { type: String, maxlength: 1000 },
+  about: { type: String },
+  status: {
+    type: String,
+    enum: ["active", "inactive"],
+    default: "inactive",
+    required: true,
+  },
 });
 
 const doctorModel = model("doctor", DoctorSchema);
 
-module.exports = {doctorModel};
+module.exports = { doctorModel };

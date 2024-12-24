@@ -3,99 +3,6 @@ const bcrypt = require("bcrypt");
 const { adminModel } = require("../../models/admin");
 const { doctorModel } = require("../../models/doctor");
 
-// const addDoctor = async (req, res) => {
-//   try {
-//     // Destructure data from request body
-//     const {
-//       firstName,
-//       lastName,
-//       age,
-//       gender,
-//       email,
-//       mobile,
-//       specialization,
-//       experience,
-//       qualifications,
-//       license,
-//       schedule,
-//       username,
-//       password,
-//       about,
-//     } = req.body;
-
-//     console.log("res.bodyyy",req.body)
-
-//     if (
-//       !firstName ||
-//       !lastName ||
-//       // !age ||
-//       // !gender ||
-//       // !email ||
-//       // !mobile ||
-//       // !specialization ||
-//       // !experience ||
-//       // !qualifications ||
-//       // !license ||
-//       !username ||
-//       !password
-//       // !about
-//     ) {
-//       return res.status(400).json({
-//         message: "All fields are required",
-//         desc: "Please fill the all required fields",
-//       });
-//     }
-
-//     // Check if the email or username already exists
-//     const existingUser = await doctorModel.findOne({
-//       $or: [{ email_address: email }, { username: username }],
-//     });
-
-//     if (existingUser) {
-//       return res.status(400).json({
-//         message: "Email or username already exists.",
-//       });
-//     }
-
-//     const hashedPassword = await bcrypt.hash(password, 10);
-
-//     const newDoctor = {
-//       firstName,
-//       lastName,
-//       age,
-//       gender,
-//       email,
-//       mobile,
-//       specialization,
-//       experience,
-//       qualifications,
-//       // schedule: JSON.parse(schedule),
-//       about,
-//     };
-
-//     // Create a new doctor user
-//     const user = new doctorModel({
-//       doctor: newDoctor,
-//       role: "doctor",
-//       email_address: email,
-//       username: username,
-//       password: hashedPassword,
-//     });
-//     await user.save();
-
-//     return res.status(201).json({
-//       message: "Doctor created successfully",
-//       doctorId: user._id,
-//     });
-//   } catch (error) {
-//     console.error("Error creating doctor:", error.message);
-//     return res.status(500).json({
-//       message: "Failed to create doctor",
-//       error: error.message,
-//     });
-//   }
-// };
-
 const addDoctor = async (req, res) => {
   try {
     const {
@@ -113,6 +20,7 @@ const addDoctor = async (req, res) => {
       username,
       password,
       about,
+      status,
     } = req.body;
 
     if (
@@ -158,7 +66,6 @@ const addDoctor = async (req, res) => {
     // Parse schedule if it's sent as a string
     const parsedSchedule =
       typeof schedule === "string" ? JSON.parse(schedule) : schedule;
-
     // Create the doctor
     const user = new doctorModel({
       firstName,
@@ -174,6 +81,7 @@ const addDoctor = async (req, res) => {
       schedule: parsedSchedule,
       about,
       username,
+      status,
       password: hashedPassword,
     });
 

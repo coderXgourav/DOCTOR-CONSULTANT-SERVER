@@ -1,6 +1,10 @@
 const { Router } = require("express");
 const loginVerify = require("../../middleware/loginVerify");
-const { addDoctor, getAllDoctors, deleteDoctor } = require("../../controllers/admin/doctor");
+const {
+  addDoctor,
+  getAllDoctors,
+  deleteDoctor,
+} = require("../../controllers/admin/doctor");
 const doctorRouter = Router();
 const multer = require("multer");
 const path = require("path");
@@ -26,6 +30,7 @@ const upload = multer({
     }
   },
 });
+
 // doctorRouter.post(
 //   "/add-doctor",
 //   loginVerify,
@@ -34,10 +39,7 @@ const upload = multer({
 // );
 
 doctorRouter.post("/add-doctor", loginVerify, addDoctor);
-doctorRouter.get("/get-doctor",loginVerify, getAllDoctors);
-
-doctorRouter.delete("/delete-doctor/:id",loginVerify, deleteDoctor);
-
-
+doctorRouter.get("/get-doctor", loginVerify, getAllDoctors);
+doctorRouter.delete("/delete-doctor/:id", loginVerify, deleteDoctor);
 
 module.exports = { doctorRouter };
