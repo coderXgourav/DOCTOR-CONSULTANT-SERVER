@@ -1,8 +1,8 @@
 const { Router } = require("express");
 const bcrypt = require("bcrypt");
-const UserModel = require("../models/users");
-const { login, checkTocken, logoutFn } = require("../controllers/auth/login");
-const loginVerify = require("../middleware/loginVerify");
+const UserModel = require("../../models/admin");
+const { login, checkTocken, logout } = require("../../controllers/auth/login");
+const loginVerify = require("../../middleware/loginVerify");
 
 const loginRoute = Router();
 
@@ -27,6 +27,6 @@ loginRoute.post("/add", async (req, res) => {
 });
 
 loginRoute.post("/check-token", loginVerify, checkTocken);
-loginRoute.post("/logout", loginVerify, logoutFn);
+loginRoute.post("/logout", loginVerify, logout);
 
 module.exports = loginRoute;

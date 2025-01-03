@@ -1,9 +1,8 @@
-const BlacklistModel = require("../../models/blacklistToken");
+const { doctorModel } = require("../../models/doctor");
 const bcrypt = require("bcrypt");
-var jwt = require("jsonwebtoken");
-const { adminModel } = require("../../models/admin");
+const jwt = require("jsonwebtoken");
 
-const login = async (req, res) => {
+module.exports.loginDoctor = async (req, res) => {
   const { email_username, password } = req.body;
   if (!email_username || !password) {
     return res.status(400).json({
@@ -14,7 +13,7 @@ const login = async (req, res) => {
   }
 
   try {
-    const user = await adminModel.findOne({
+    const user = await doctorModel.findOne({
       $or: [{ email: email_username }, { username: email_username }],
     });
 
@@ -63,21 +62,3 @@ const login = async (req, res) => {
     });
   }
 };
-
-const checkTocken = (req, res) => {
-  return res
-    .status(200)
-    .json({ status: true, message: "valid token", desc: "" });
-};
-
-const logout = async (req, res) => {
-  const token = req?.token;
-  await BlacklistModel.create({ token });
-  return res.status(200).json({
-    status: true,
-    message: "Logout Successful",
-    desc: "You have been logged out",
-  });
-};
-
-module.exports = { login, checkTocken, logout };

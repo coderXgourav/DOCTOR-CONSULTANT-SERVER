@@ -1,5 +1,71 @@
 const { DepartmentModel } = require("../../models/department");
 
-const addDepartment = async (req, res) => {};
+const addDepartment = async (req, res) => {
+  const { name, desc } = req.body;
+  if (!name) {
+    return res.status(400).json({
+      status: false,
+      message: "Department Name is required",
+      desc: " Please enter department name",
+    });
+  }
+  try {
+    const check = await DepartmentModel.findOne({ department: name });
+    if (check) {
+      return res.status(400).json({
+        status: false,
+        message: "Department Already exist!",
+        desc: "Plese add unique department..",
+      });
+    }
+    const department = new DepartmentModel({
+      department: name,
+      desc: desc,
+    });
+    await department.save();
+    return res.status(201).json({
+      status: true,
+      message: "Added Successfully",
+      desc: " Department Added Successfully",
+    });
+  } catch (error) {
+    return res.status(500).json({
+      status: true,
+      message: "Internal Error",
+      desc: error.message,
+    });
+  }
+};
 
-module.exports = { addDepartment };
+const allDepartments = async (req, res) => {
+  try {
+    const data = await DepartmentModel.find({}).sort("department");
+    return res.status(200).send(data);
+  } catch (error) {
+    return res.status(500).json({
+      status: false,
+      message: "Technical Issue!",
+      desc: "Sorry, Please check your internal system",
+    });
+  }
+};
+
+
+const deleteDepartment = async (req, res) => {
+  const { departmentId } = req.params;
+  try {
+    await DepartmentModel.findByIdAndDelete(departmentId);
+    return res.status(200).json({
+      status: true,
+      message: "Deleted Department",
+      desc: "Department deleted successfully..",
+    });
+  } catch (error) {
+    return res.status(500).json({
+      status: false,
+      message: "Technical Issue!",
+      desc: "please try again later !",
+    });
+  }
+};
+module.exports = { addDepartment, allDepartments, deleteDepartment };
