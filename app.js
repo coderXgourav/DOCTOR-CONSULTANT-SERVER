@@ -4,7 +4,7 @@ const dotenv = require("dotenv");
 const cors = require("cors");
 dotenv.config();
 const { connectDB } = require("./config/conn");
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 6000;
 const loginRoute = require("./routes/login");
 const { departmentRoute } = require("./routes/admin/department");
 
