@@ -12,6 +12,7 @@ const { doctorRouter } = require("./routes/admin/doctor");
 const { router } = require("./routes/admin/admin");
 const { mainDoctorRouter } = require("./routes/doctor/auth.routes");
 const { staffRouter } = require("./routes/staff/auth.routes");
+const { patientRouter } = require("./routes/patient/auth.routes");
 
 app.use(cors());
 connectDB();
@@ -29,6 +30,8 @@ app.use("/admin", router);
 app.use("/admin", doctorRouter);
 app.use("/doctor", mainDoctorRouter);
 app.use("/staff", staffRouter);
+// app.use("/patient", patientRouter);
+
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });

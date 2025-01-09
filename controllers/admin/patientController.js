@@ -1,4 +1,5 @@
 const { patientModel } = require("../../models/patient");
+const bcrypt = require("bcrypt");
 const addPatient = async (req, res) => {
   try {
     const {
@@ -11,6 +12,7 @@ const addPatient = async (req, res) => {
       mobile,
       email,
       address,
+      password,
     } = req.body;
 
     // Validate required fields
@@ -23,11 +25,13 @@ const addPatient = async (req, res) => {
       !treatment ||
       !mobile ||
       !email ||
-      !address
+      !address ||
+      !password
     ) {
       return res.status(400).json({ message: "All fields are required" });
     }
 
+    const hashPassword = await bcrypt.hash(password, 10);
     // Create a new patient
     const patient = new patientModel({
       first_name,
@@ -39,6 +43,7 @@ const addPatient = async (req, res) => {
       mobile,
       email,
       address,
+      password: hashPassword,
     });
 
     await patient.save();
