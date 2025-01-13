@@ -10,7 +10,7 @@ const DoctorSchema = new Schema({
   password: { type: String },
   mobile: { type: String },
   profilePhoto: { type: String }, // URL or file path for the profile photo
-  specialization: { type: String },
+  specialization: { type: Schema.Types.ObjectId, ref: "Departments" },
   experience: { type: Number }, // In years
   qualifications: { type: String },
   license: { type: String },

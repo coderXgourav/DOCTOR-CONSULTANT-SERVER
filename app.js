@@ -30,7 +30,7 @@ app.use("/admin", router);
 app.use("/admin", doctorRouter);
 app.use("/doctor", mainDoctorRouter);
 app.use("/staff", staffRouter);
-// app.use("/patient", patientRouter);
+app.use("/patient", patientRouter);
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);

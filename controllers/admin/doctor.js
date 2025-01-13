@@ -4,6 +4,8 @@ const { adminModel } = require("../../models/admin");
 const { doctorModel } = require("../../models/doctor");
 
 const addDoctor = async (req, res) => {
+  console.log(req.body);
+
   try {
     const {
       firstName,
@@ -62,10 +64,15 @@ const addDoctor = async (req, res) => {
 
     // Hash the password
     const hashedPassword = await bcrypt.hash(password, 10);
-
-    // Parse schedule if it's sent as a string
-    const parsedSchedule =
-      typeof schedule === "string" ? JSON.parse(schedule) : schedule;
+    const parsedSchedule = schedule || {
+      sun: { start: "", end: "" },
+      mon: { start: "", end: "" },
+      tue: { start: "", end: "" },
+      wed: { start: "", end: "" },
+      thu: { start: "", end: "" },
+      fri: { start: "", end: "" },
+      sat: { start: "", end: "" },
+    };
     // Create the doctor
     const user = new doctorModel({
       firstName,
@@ -84,9 +91,7 @@ const addDoctor = async (req, res) => {
       status,
       password: hashedPassword,
     });
-
     await user.save();
-
     return res.status(201).json({
       status: true,
       message: "Doctor created successfully",
@@ -196,4 +201,43 @@ const deleteDoctor = async (req, res) => {
   }
 };
 
-module.exports = { addDoctor, addAdmin, getAllDoctors, deleteDoctor };
+const getDoctorById = async (req, res) => {
+  try {
+    const doctorId = req.params.doctorId;
+    // Find the doctor by ID
+    const doctor = await doctorModel.findById(doctorId);
+    doctor.password = "**********";
+
+    if (!doctor) {
+      return res.status(404).json({
+        status: false,
+        message: "Doctor not found",
+        desc: "No doctor found with the provided ID",
+      });
+    }
+
+    // Return the doctor details
+    return res.status(200).json({
+      status: true,
+      message: "Doctor retrieved successfully",
+      doctor,
+      desc: "Doctor details fetched successfully.",
+    });
+  } catch (error) {
+    console.error("Error fetching doctor:", error.message);
+    return res.status(500).json({
+      status: false,
+      message: "Failed to fetch doctor",
+      error: error.message,
+      desc: "Oops! Something went wrong. Please try again later.",
+    });
+  }
+};
+
+module.exports = {
+  addDoctor,
+  addAdmin,
+  getAllDoctors,
+  deleteDoctor,
+  getDoctorById,
+};

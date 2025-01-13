@@ -50,7 +50,6 @@ const allDepartments = async (req, res) => {
   }
 };
 
-
 const deleteDepartment = async (req, res) => {
   const { departmentId } = req.params;
   try {
@@ -68,4 +67,30 @@ const deleteDepartment = async (req, res) => {
     });
   }
 };
-module.exports = { addDepartment, allDepartments, deleteDepartment };
+
+const getDepartmentById = async (req, res) => {
+  const { departmentId } = req.params;
+  try {
+    const department = await DepartmentModel.findById(departmentId);
+    if (!department) {
+      return res.status(404).json({
+        status: false,
+        message: "Department Not Found",
+        desc: "No department found with the given ID",
+      });
+    }
+    return res.status(200).json({ department });
+  } catch (error) {
+    return res.status(500).json({
+      status: false,
+      message: "Technical Issue!",
+      desc: "Sorry, Please check your internal system",
+    });
+  }
+};
+module.exports = {
+  addDepartment,
+  allDepartments,
+  deleteDepartment,
+  getDepartmentById,
+};
